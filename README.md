@@ -1,52 +1,47 @@
-# scrapeLocalSlugs.js
+# Red Canary Auditor
 
-This utility scrapes and saves all local location slugs from a brand’s `/locations` page, handling different selectors for production and staging environments.
+> Catch misfiring tests and targeting leaks before they gas the whole mine and harm the miners.  
+> A Node.js-based audit tool for validating Convert test deployments across production and staging.
 
-## ✅ Features
+---
 
-- Supports dynamic scraping for Neighborly brand prod/stage sites
-- Handles brand-specific DOM selectors
-- Normalizes and deduplicates slugs
-- Outputs to `results/mreLocalSlugs.json`
-- Detects unexpected content (e.g., redirects or non-HTML)
+## 🔍 What It Does
 
-## 🛠️ Tools Used
+This tool checks whether expected A/B tests or deployments are running correctly across different site areas for supported brands.
 
-- `Node.js`
-- `jsdom`
-- `fs` (Node file system)
-- `URL` API
-- ES Module imports
+It:
+- Scrapes for local slugs from `/locations` pages
+- Scrapes all URLs from sitemap
+- Resolves expected test areas from token-based config
+- Checks each page for presence of Convert tests
+- Outputs a clean JSON audit report
 
-## 🔧 Configuration
+---
 
-Ensure your audit config file (e.g., `configs/mreAuditConfig.js`) includes:
+## 🧱 Tech Stack
 
-```js
-locationLinkSelector: {
-  prod: 'ul.location-list li.location-item .location-heading a',
-  stage: 'ul.location-list li.location-item a.location-title'
-}
-```
+- **Node.js** (v18+)
+- **jsdom** – For parsing client-side rendered HTML
+- **node-fetch** – For HTML requests
+- **fast-xml-parser** – For scraping sitemap XML
+- **Modular config files** – Per-brand targeting and selectors
 
-## 🚀 Usage
+---
 
-Edit `utils/scrapeLocalSlugs.js` to toggle between environments:
-
-```js
-const useStaging = false; // true = stage, false = prod
-```
-
-Then run:
+## 📁 File Structure
 
 ```bash
-node utils/scrapeLocalSlugs.js
-```
-
-Check `results/mreLocalSlugs.json` for the output slugs.
-
-## 🧩 Next Steps
-
-- Integrate with `expandExpectedUrls.js` to map slugs to test tokens
-- Add CLI flags for staging/prod toggle (optional)
-- Auto-scrape offers or special paths in future iterations
+.
+├── configs/
+│   └── mreAuditConfig.js       # Brand-specific audit config
+├── results/
+│   ├── mreLocalSlugs.json      # Scraped local slugs
+│   ├── mreSitemapUrls.json     # Scraped sitemap URLs
+│   └── auditReport.json        # Final audit results
+├── utils/
+│   ├── scrapeLocalSlugs.js     # Scrapes local slugs
+│   ├── scrapeSitemap.js        # Scrapes all site URLs from sitemap
+│   ├── expandExpectedUrls.js   # Converts token-based config into real URL targets
+│   └── auditUrls.js            # Runs audit and outputs match/mismatch logs
+└── scripts/
+    └── runAudit.js             # Entry point for running everything
