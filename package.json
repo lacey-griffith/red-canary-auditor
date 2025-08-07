@@ -1,0 +1,15 @@
+{
+  "name": "convert-audit-tool",
+  "version": "1.0.0",
+  "description": "Tool to audit Convert deployments by site area and brand",
+  "type": "module",
+  "main": "scripts/runAudit.js",
+  "scripts": {
+    "start": "node scripts/runAudit.js"
+  },
+  "dependencies": {
+    "jsdom": "^26.1.0",
+    "node-fetch": "^3.3.2",
+    "puppeteer": "^24.16.0"
+  }
+}
